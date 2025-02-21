@@ -5,16 +5,26 @@
         TRIGGER_KEY;
 
     function showMeaning (event){
+        console.log('showMeaning triggered', event);
         var createdDiv,
             info = getSelectionInfo(event);
 
+        console.log('Selection info:', info);
         if (!info) { return; }
 
         retrieveMeaning(info)
             .then((response) => {                
-                if (!response.content) { return noMeaningFound(createdDiv); }
+                console.log('Retrieved meaning response:', response);
+                if (!response.content) { 
+                    console.log('No content in response');
+                    return noMeaningFound(createdDiv); 
+                }
 
                 appendToDiv(createdDiv, response.content);
+            })
+            .catch(error => {
+                console.error('Error retrieving meaning:', error);
+                noMeaningFound(createdDiv);
             });
 
         // Creating this div while we are fetching meaning to make extension more fast.
@@ -54,6 +64,7 @@
     }
 
     function retrieveMeaning(info){
+        console.log('Sending message to background:', { word: info.word, lang: LANGUAGE, time: Date.now() });
         return browser.runtime.sendMessage({ word: info.word, lang: LANGUAGE, time: Date.now() });
     }
 

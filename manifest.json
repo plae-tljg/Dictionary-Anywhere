@@ -41,5 +41,6 @@
   "permissions": [
     "storage",
     "https://www.google.com/"
-  ]
+  ],
+  "incognito": "split"
 }
